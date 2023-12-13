@@ -19,8 +19,6 @@ namespace BNKManager
         static void Main(string[] args)
         {
             var i = 0;
-            //Console.WriteLine(args[0].ToString());
-            // byte[] filebytes = File.ReadAllBytes("./741226639.wem
             WwiseBank myBank = null;
             string TargetBankName = null;
             foreach (string bnk in args)
@@ -135,7 +133,6 @@ namespace BNKManager
             var dataIndex = (DIDXSection)null;
             var data = (DATASection)null;
             var hirc = (HIRCSection)null;
-            //WwiseBank myBank = new WwiseBank(AppDomain.CurrentDomain.BaseDirectory + @"/WwiseDefaultBank_VO_Patient_Sewers.bnk");
             foreach (BankSection Section in CurrentBank.bankSections) {
                 if (Section is DIDXSection) dataIndex = (DIDXSection)Section;
                 if (Section is DATASection) data = (DATASection)Section;
@@ -156,7 +153,6 @@ namespace BNKManager
 
                 for (int i = 0; i < data.wemFiles.Count; i++)
                 {
-                    //Console.WriteLine(data.wemFiles[i].info.ID.ToString());
                     if (data.wemFiles[i].info.ID == fileID)
                     {
                         Console.WriteLine($"Replaced: {fileID}.wem ({i+1})");
@@ -170,7 +166,6 @@ namespace BNKManager
                     {
                         if (obj.objectType == WwiseObjectType.Sound_SFX__Sound_Voice)
                         {
-                            // Console.WriteLine("Replaced!");
                             SoundSFXVoiceWwiseObject soundObj = (SoundSFXVoiceWwiseObject)obj;
                             DIDXSection.EmbeddedWEM gotEmbedded = dataIndex.GetEmbeddedWEM(soundObj.audioFileID);
                             if (gotEmbedded != null)
@@ -183,11 +178,9 @@ namespace BNKManager
                 }
             }
             return CurrentBank;
-            //myBank.Save(AppDomain.CurrentDomain.BaseDirectory + @"/WwiseDefaultBank_VO_Patient_Sewers2.bnk");
         }
         public static double GetAudioFileSeconds(ref byte[] data)
         {
-            // Approximated
             double result = 0;
             using (BinaryReader br = new BinaryReader(new MemoryStream(data)))
             {

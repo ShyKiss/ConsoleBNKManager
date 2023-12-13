@@ -16,11 +16,6 @@ namespace BNKManager
             this.banksList = banksList;
         }
 
-        public WPKSoundBank GetWPKBank()
-        {
-            return (WPKSoundBank)this.banksList.Find(x => x is WPKSoundBank);
-        }
-
         public BankSection GetSection(string sectionName)
         {
             BankSection found = null;
@@ -57,19 +52,6 @@ namespace BNKManager
                     }
                 }
             }
-            //File not found yet
-            WPKSoundBank wpkBank = this.GetWPKBank();
-            if (wpkBank != null)
-            {
-                foreach (WPKSoundBank.WPKSoundBankWEMFile wemFile in wpkBank.wemFiles)
-                {
-                    if (wemFile.ID == fileID)
-                    {
-                        return wemFile.data;
-                    }
-                }
-            }
-            //File not found :(
             return null;
         }
 
@@ -79,7 +61,7 @@ namespace BNKManager
             DIDXSection dataIndex = (DIDXSection)this.GetSection("DIDX");
             DATASection data = (DATASection)this.GetSection("DATA");
             HIRCSection hirc = (HIRCSection)this.GetSection("HIRC");
-            // List all audio files
+
             if (dataIndex != null && data != null)
             {
                 foreach (DATASection.WEMFile wem in data.wemFiles)
@@ -87,15 +69,6 @@ namespace BNKManager
                     newList.Add(new WEMFile(wem.info.ID, 0, GetAudioFileSeconds(ref wem.data)));
                 }
             }
-            WPKSoundBank wpkBank = this.GetWPKBank();
-            if (wpkBank != null)
-            {
-                foreach (WPKSoundBank.WPKSoundBankWEMFile wem in wpkBank.wemFiles)
-                {
-                    newList.Add(new WEMFile(wem.ID, 0, GetAudioFileSeconds(ref wem.data)));
-                }
-            }
-            // Eventually find associated events
             if (hirc != null)
             {
                 foreach (WEMFile wem in newList)
@@ -122,7 +95,6 @@ namespace BNKManager
 
         public static int GetAudioFileSeconds(ref byte[] data)
         {
-            // Approximated
             int result = 0;
             using (BinaryReader br = new BinaryReader(new MemoryStream(data)))
             {
@@ -177,17 +149,6 @@ namespace BNKManager
                             }
                         }
 
-                    }
-                }
-            }
-            WPKSoundBank wpkBank = this.GetWPKBank();
-            if (wpkBank != null)
-            {
-                foreach (WPKSoundBank.WPKSoundBankWEMFile wemFile in wpkBank.wemFiles)
-                {
-                    if (wemFile.ID == fileID)
-                    {
-                        wemFile.data = newData;
                     }
                 }
             }

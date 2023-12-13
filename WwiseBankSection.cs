@@ -258,7 +258,6 @@ namespace BNKManager
             br.BaseStream.Seek(offset + length, SeekOrigin.Begin);
         }
 
-        //Use less memory
         public override byte[] GetBytes()
         {
             byte[] sectionBytes = null;
